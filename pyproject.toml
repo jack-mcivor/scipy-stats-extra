@@ -1,0 +1,82 @@
+[tool.poetry]
+name = "scipy-stats-extra"
+version = "0.1.0"
+description = "Extra statistical functions for SciPy"
+authors = ["Jack McIvor"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.10"
+numpy = ">=1.20.0"
+scipy = ">=1.6.0"
+
+[tool.poetry.dev-dependencies]
+pytest = ">=7.0.0"
+ruff = ">=0.1.0"
+mypy = ">=1.0.0"
+pre-commit = ">=3.5.0"
+
+[tool.pytest.ini_options]
+addopts = [
+    "--import-mode=prepend",
+]
+testpaths = [
+    "tests",
+]
+filterwarnings = [
+    "error",
+]
+
+[tool.mypy]
+plugins = "numpy.typing.mypy_plugin"
+warn_unused_configs = true
+strict = true
+enable_error_code = ["ignore-without-code", "redundant-expr", "truthy-bool"]
+allow_untyped_defs = true
+allow_incomplete_defs = true
+
+[[tool.mypy.overrides]]
+module = "scipy.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "scipy_stats_extra.stats"
+allow_subclassing_any = true
+allow_untyped_calls = true
+
+[tool.ruff]
+line-length = 120
+target-version = 'py310'
+
+[tool.ruff.lint]
+ignore = [
+    # https://docs.astral.sh/ruff/formatter/#conflicting-lint-rules
+    "W191",  # Enforced by the formatter
+    "E501",
+]
+select = [
+    "B",        # flake8-bugbear
+    "E",        # pycodestyle
+    "F",        # pyflakes
+    "N",        # pep8-naming
+    "W",        # pycodestyle
+    "A",        # flake8-builtins
+    "G",        # flake8-logging-format
+    "INP",      # flake8-no-pep420
+    "TRY400",   # tryceratops
+    "BLE",      # flake8-blind-except
+    "I",        # isort
+    "FLY",      # flynt
+    "PTH",      # flake8-use-pathlib
+    "PGH",      # pygrep-hooks
+    "PD002",    # pandas-vet
+    "PT006",    # flake8-pytest-style
+    "S113",     # flake8-bandit
+    "RUF",      # ruff
+    "NPY",      # NumPy
+]
+fixable = ["I"]
+
+[tool.ruff.lint.per-file-ignores]
+"**/{tests,scripts}/*" = ["INP"]
+"src/scipy_stats_extra/stats.py" = ["N801"]  # scipy uses snake case for distribution generating classes

@@ -1,0 +1,41 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+repos:
+    - repo: https://github.com/pre-commit/pre-commit-hooks
+      rev: v4.3.0
+      hooks:
+          - id: trailing-whitespace
+            exclude: \.csv
+          - id: end-of-file-fixer
+            exclude: \.csv|\.json$
+          - id: check-added-large-files
+          - id: check-json
+          - id: check-toml
+          - id: check-yaml
+    - repo: local
+      hooks:
+          - id: sort_imports
+            name: sort_imports
+            entry: ruff check --select=I --fix
+            require_serial: true
+            language: system
+            types_or: [cython, pyi, python]
+          - id: format
+            name: format
+            entry: ruff format --preview
+            language: system
+            types: [python]
+            require_serial: true
+          - id: ruff
+            name: ruff
+            entry: ruff check
+            language: system
+            types: [python]
+            require_serial: true
+          - id: mypy
+            name: mypy
+            entry: poetry run mypy src
+            pass_filenames: false
+            language: system
+            types: [python]
+            require_serial: true
